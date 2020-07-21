@@ -77,6 +77,25 @@ export default {
         // 该函数会有一个回调函数，回调函数的传参 valid 代表是否校验成功
         if (valid) {
           // 成功->登录
+          //发送请求
+          /**
+          请求方式:post
+          请求地址:http://ttapi.research.itcast.cn/mp/v1_0/authorizations
+          请求参数:mobile  code
+          */
+          this.$http
+            .post(
+              "http://ttapi.research.itcast.cn/mp/v1_0/authorizations",
+              this.loginForm
+            )
+            .then(res => {
+              //   console.log(res.data);//获取到所有数据
+              // 跳转首页->编程式导航
+              this.$router.push("/");
+            })
+            .catch(err => {
+              this.$message.error("手机号或验证码错误");
+            });
         }
       });
     }
