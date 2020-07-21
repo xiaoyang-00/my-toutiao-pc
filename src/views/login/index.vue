@@ -3,14 +3,19 @@
     <el-card>
       <img src="../../assets/logo_index.png" alt />
       <!-- 表单容器 -->
-      <el-form>
+      <!-- 为表单容器绑定一个表单数据对象和一个校验规则对象 -->
+      <el-form :model="loginForm" :rules="loginRules" status-icon>
         <!-- 表单项容器 -->
-        <el-form-item>
+        <el-form-item prop="mobile">
           <!-- 表单元素 -->
-          <el-input placeholder="请输入手机号"></el-input>
+          <el-input placeholder="请输入手机号" v-model="loginForm.mobile"></el-input>
         </el-form-item>
-        <el-form-item>
-          <el-input placeholder="请输入验证码" style="width:240px;margin-right:8px"></el-input>
+        <el-form-item prop="code">
+          <el-input
+            placeholder="请输入验证码"
+            style="width:240px;margin-right:8px"
+            v-model="loginForm.code"
+          ></el-input>
           <el-button>发送验证码</el-button>
         </el-form-item>
         <el-form-item>
@@ -27,7 +32,42 @@
 
 <script>
 export default {
-  name: "page-login"
+  name: "page-login",
+  data() {
+    //自定义校验函数->必须在return之前定义好
+    const checkMobile = (rule, value, callback) => {
+      // rule->当前字段对应的校验规则对象
+      // value->待校验的数据
+      // callback->校验完毕后调用的回调函数
+      // 手机号规则：必须1开头，第二位是3-9之间，9个数字结尾
+      if (/^1[3-9]\d{9}$/.test(value)) {
+        callback();
+      } else {
+        callback(new Error("手机号不正确"));
+      }
+    };
+    return {
+      //表单数据对象-->手机号和验证码
+      loginForm: {
+        mobile: "",
+        code: ""
+      },
+      //表单校验规则对象
+      loginRules: {
+        // 验证手机号
+        mobile: [
+          { required: true, message: "请输入手机号", trigger: "blur" },
+          // 手机号需要自定义校验规则
+          //   使用自定义手机号校验规则
+          { validator: checkMobile, trigger: "blur" }
+        ],
+        code: [
+          { required: true, message: "请输入验证码", trigger: "blur" },
+          { len: 6, message: "验证码必须是6个字符", trigger: "blur" }
+        ]
+      }
+    };
+  }
 };
 </script>
 
