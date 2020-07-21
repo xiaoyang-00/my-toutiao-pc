@@ -5,8 +5,17 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
+// 导入组件
+import Login from '@/views/login'
+
+
 // 定义路由规则
-const routes = []
+const routes = [
+    {
+        path: '/login',
+        component: Login
+    }
+]
 
 // 初始化路由实例
 const router = new VueRouter({ routes })
